@@ -24,6 +24,7 @@ def printMatrix(matrix):
         for i in range(len(matrix)):
             for j in range(len(matrix[i])):
                 strToPrint = str(matrix[i][j]) + " " if matrix[i][j] < 10 else str(matrix[i][j])
+                if strToPrint == "16": strToPrint = "  "
                 print("| " + strToPrint, end=" ")
                 if j == len(matrix[i])-1:
                     print("|")

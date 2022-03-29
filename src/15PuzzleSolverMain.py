@@ -1,10 +1,11 @@
 import time
+import sys
 import MatrixController as m
 import Solver as s
 
 # variables for BnB
 matrixStep = []
-queue = []
+liveQueue = []
 f = 1
 parent = {}
 
@@ -19,6 +20,9 @@ def printTitle():
 """)
     print("\nDibuat oleh: Dzaky Fattan Rizqullah - 13520003\n")
 
+
+# The Main Program
+sys.setrecursionlimit((10**3)*2)
 printTitle()
 ipt = input("\nInput nama file, pastikan sudah terletak dalam folder test (contoh: input.txt): ")
 matrix = m.readMatrix(ipt)
@@ -31,9 +35,16 @@ if (matrix != None):
     else:
         start = time.time_ns()
         print("Status tujuan dapat dicapai")
-        s.solve(matrix, matrixStep, queue, parent)
+        s.startState = matrix
+        s.solve(matrix, matrixStep, liveQueue, parent)
         end = time.time_ns()
+        if (matrixStep != []):
+            print("\nPosisi awal:")
+            m.printMatrix(matrixStep.pop(0))
+            for i in range(len(matrixStep)):
+                print("\nLangkah ke-" + str(i+1) + ":")
+                m.printMatrix(matrixStep[i])
+
         print("Waktu eksekusi: " + str((end-start)/1000000) + " ms")
-        for i in range(len(matrixStep)):
-            print("\nLangkah ke-" + str(i+1) + ":")
-            m.printMatrix(matrixStep[i])
+        # prompt before exiting
+        input("Press enter to exit\n")
