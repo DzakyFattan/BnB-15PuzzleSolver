@@ -1,31 +1,34 @@
+import time
 import MatrixController as m
 
 # goal state
 goalState = [[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12], [13, 14, 15, 16]]
+# counter to create a key for each matrixState
 counter = 0
 tempDict = {}
 visited = []
 startState = []
+timeLimit = 60
 
 def KURANGFunc(matrix):
     kurang = 0
     emptyPos = -1
     print("Urutan penulisan fungsi KURANG(i) mengikuti urutan baris dan kolom")
-    for i in range(len(matrix)**2):
-        if (matrix[i//len(matrix)][i % len(matrix)] == 16):
-            emptyPos = i
-        tempKurang = 0
-        for j in range(i+1, len(matrix)**2):
-            if (matrix[j//len(matrix)][j % len(matrix)] < matrix[i//len(matrix)][i % len(matrix)]):
-                tempKurang += 1
-        if matrix[i//len(matrix)][i % len(matrix)] != 16:
-            print("KURANG(" + str(matrix[i//len(matrix)]
-                  [i % len(matrix)]) + ") = " + str(tempKurang))
-        kurang += tempKurang
-    return kurang if emptyPos % 2 == 1 else kurang+1
+    for i in range(len(matrix)):
+        for j in range(len(matrix[i])):
+            if matrix[i][j] == 16:
+                emptyPos = i + j
+            tempKurang = 0
+            for k in range(i * len(matrix) + j + 1, len(matrix)**2):
+                if matrix[k//len(matrix)][k % len(matrix)] < matrix[i][j]:
+                    tempKurang += 1
+            print("KURANG(" + str(matrix[i][j]) + ") = " + str(tempKurang))
+            kurang += tempKurang
+    return kurang if emptyPos % 2 == 0 else kurang+1
 
 
 def gFunc(matrix):
+    # our heuristic function, the number of misplaced tiles
     g = 0
     for i in range(len(matrix)**2):
         if (matrix[i//len(matrix)][i % len(matrix)] != i + 1):
@@ -34,11 +37,14 @@ def gFunc(matrix):
 
 
 def getKey(matrixAsVal):
+    # get the key of the matrixState
     for key, value in tempDict.items():
         if matrixAsVal == value:
             return key
-    
+
+
 def connectParent(newMatrix, matrixStep, parent):
+    # create matrixStep from the goal state to the start state
     matrixStep.append(newMatrix)
     tempPar = parent[getKey(newMatrix)]
     while tempPar != startState:
@@ -50,53 +56,62 @@ def connectParent(newMatrix, matrixStep, parent):
 
 
 def solve(matrix, matrixStep, queue, parent):
-    if matrix in visited:
-        return
-        # for i in visited:
-        #     m.printMatrix(i)
-    # print("-> Solve dipanggil, matriks di-append ke queue visited")
-    visited.append(matrix)
-    if matrix == goalState:
-        matrixStep.append(matrix)
-        return
-    
-    for i in range(4):
-        newMatrix = m.move16(matrix, i)
-        # m.printMatrix(newMatrix)
-        # print("gFunc newMatrix:", gFunc(newMatrix))
-        queue.append(newMatrix)
+    # matrix stores the current matrixState
+    # matrixStep stores the steps of solving the matrix
+    # queue stores the list of matrixState that are not yet visited, is a PrioQueue to make sure we visited the matrixState with the lowest gFunc
+    # parent stores the parent of each matrixState
 
-        if len(queue) > 1:
-            try:
+    # a timer, to prevent a very long execution time
+    start = time.time()
+
+    # append first matrix state to queue
+    queue.append(matrix)
+    count = 0
+    while queue and time.time() - start < timeLimit:
+
+        # count stores the number of iteration, always print before return
+        count += 1
+        matrix = queue.pop(0)
+
+        # check if matrix already visited, this part can be improved
+        if matrix in visited:
+            continue
+        visited.append(matrix)
+
+        # if start state is already a goal state, return the matrixStep
+        if matrix == goalState:
+            matrixStep.append(matrix)
+            print("Total iterasi: " + str(count))
+            return
+
+        # iterate all 4 possible direction
+        for i in range(4):
+            newMatrix = m.move16(matrix, i)
+
+            # queue the newMatrix, could also be improved
+            queue.append(newMatrix)
+
+            if len(queue) > 1:
+
+                # gFunc check
                 pos = queue.index(newMatrix)
                 while (pos > 0 and gFunc(queue[pos-1]) > gFunc(queue[pos])):
                     queue[pos-1], queue[pos] = queue[pos], queue[pos-1]
                     pos -= 1
-            except RecursionError:
-                print("Recursion Error, Hasil tidak dapat ditemukan")
-                connectParent(matrix, matrixStep, parent)
-                return
-        
-        global counter
-        tempDict[counter] = newMatrix
-        parent[counter] = matrix
-        counter += 1
-        if newMatrix == goalState:
-            connectParent(newMatrix, matrixStep, parent)
-            return
+            
+            # create a key for the newMatrix, to be used as a key in the parent dictionary
+            global counter
+            tempDict[counter] = newMatrix
+            parent[counter] = matrix
+            counter += 1
 
-    if len(queue) != 0:
-        # print("liveQueue atm:")
-        # for i in queue:
-        #     m.printMatrix(i)
-        nextMatrix = queue.pop(0)
-        # print("gFunc nextMatrix:", gFunc(nextMatrix))
-        while (nextMatrix in visited):
-            nextMatrix = queue.pop(0)
-            # print("liveQueue length remove:",len(queue))
-            if len(queue) == 0:
+            # finally, check if newMatrix is the goal state
+            if newMatrix == goalState:
+                connectParent(newMatrix, matrixStep, parent)
+                print("Total iterasi: " + str(count))
                 return
-        # print("Matriks selanjutnya:")
-        # m.printMatrix(nextMatrix)
-        # print("=====================================")
-        solve(nextMatrix, matrixStep, queue, parent)
+
+    # if time limit exceded
+    if queue:
+        connectParent(matrix, matrixStep, parent)
+        print("Total iterasi: " + str(count))

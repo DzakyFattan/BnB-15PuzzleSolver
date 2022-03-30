@@ -22,7 +22,7 @@ def printTitle():
 
 
 # The Main Program
-sys.setrecursionlimit((10**3)*2)
+sys.setrecursionlimit((10**3))
 printTitle()
 ipt = input("\nInput nama file, pastikan sudah terletak dalam folder test (contoh: input.txt): ")
 matrix = m.readMatrix(ipt)
@@ -30,6 +30,7 @@ if (matrix != None):
     print("Matriks yang dibaca:")
     m.printMatrix(matrix)
     kurang = s.KURANGFunc(matrix)
+    print("Total kurang:", kurang)
     if kurang % 2 == 1:
         print("Status tujuan tidak dapat dicapai")
     else:
@@ -44,7 +45,15 @@ if (matrix != None):
             for i in range(len(matrixStep)):
                 print("\nLangkah ke-" + str(i+1) + ":")
                 m.printMatrix(matrixStep[i])
-
-        print("Waktu eksekusi: " + str((end-start)/1000000) + " ms")
+                print("gFunc: " + str(s.gFunc(matrixStep[i])))
+        duration = (end - start)
+        if duration > 1000000000:
+            duration = duration / 1000000000
+            print("\nWaktu eksekusi:", duration, "detik")
+        elif duration > 1000000:
+            duration = duration / 1000000
+            print("\nWaktu eksekusi:", duration, "ms")
+        else:
+            print("\nWaktu eksekusi:", duration, "ns")
         # prompt before exiting
         input("Press enter to exit\n")
