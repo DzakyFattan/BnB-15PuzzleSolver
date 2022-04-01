@@ -30,7 +30,7 @@ if (matrix != None):
     print("Matriks yang dibaca:")
     m.printMatrix(matrix)
     kurang = s.KURANGFunc(matrix)
-    print("Total kurang:", kurang)
+    print("Jumlah Kurang(i) + X:", kurang)
     if kurang % 2 == 1:
         print("Status tujuan tidak dapat dicapai")
     else:
