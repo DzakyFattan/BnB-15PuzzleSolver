@@ -16,7 +16,16 @@ def readMatrix(filename):
         with open(fileDir, 'r') as f:
             for line in f:
                 tempList = list(line.strip().split())
-                matrix.append([int(x) for x in tempList])
+                tempLine = []
+                for x in tempList:
+                    print(type(x), x)
+                    try:
+                        tempLine.append(int(x))
+                    except ValueError:
+                        tempLine.append(16)
+                print(tempLine)
+                matrix.append(tempLine)
+                # matrix.append([int(x) for x in tempList])
         return matrix
     except FileNotFoundError:
         print("File tidak ditemukan")
