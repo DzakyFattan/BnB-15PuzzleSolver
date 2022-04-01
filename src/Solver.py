@@ -8,8 +8,9 @@ counter = 0
 tempDict = {}
 visited = []
 startState = []
-timeLimit = 60
+timeLimit = 300
 
+# Function Kurang(i)
 def KURANGFunc(matrix):
     kurang = 0
     emptyPos = -1
@@ -22,29 +23,28 @@ def KURANGFunc(matrix):
             for k in range(i * len(matrix) + j + 1, len(matrix)**2):
                 if matrix[k//len(matrix)][k % len(matrix)] < matrix[i][j]:
                     tempKurang += 1
-            print("KURANG(" + str(matrix[i][j]) + ") = " + str(tempKurang))
+            if (matrix[i][j] != 16):
+                print("KURANG(" + str(matrix[i][j]) + ") = " + str(tempKurang))
             kurang += tempKurang
     return kurang if emptyPos % 2 == 0 else kurang+1
 
-
+# our heuristic function, the number of misplaced tiles
 def gFunc(matrix):
-    # our heuristic function, the number of misplaced tiles
     g = 0
-    for i in range(len(matrix)**2):
-        if (matrix[i//len(matrix)][i % len(matrix)] != i + 1):
-            g += 1
+    for i in range(len(matrix)):
+        for j in range(len(matrix[i])):
+            if matrix[i][j] != goalState[i][j] and matrix[i][j] != 16:
+                g += 1
     return g
 
-
+# get the key of the matrixState
 def getKey(matrixAsVal):
-    # get the key of the matrixState
     for key, value in tempDict.items():
         if matrixAsVal == value:
             return key
 
-
+# create matrixStep from the goal state to the start state
 def connectParent(newMatrix, matrixStep, parent):
-    # create matrixStep from the goal state to the start state
     matrixStep.append(newMatrix)
     tempPar = parent[getKey(newMatrix)]
     while tempPar != startState:
@@ -54,7 +54,7 @@ def connectParent(newMatrix, matrixStep, parent):
     matrixStep.append(startState)
     matrixStep.reverse()
 
-
+# solver
 def solve(matrix, matrixStep, queue, parent):
     # matrix stores the current matrixState
     # matrixStep stores the steps of solving the matrix
@@ -68,9 +68,6 @@ def solve(matrix, matrixStep, queue, parent):
     queue.append(matrix)
     count = 0
     while queue and time.time() - start < timeLimit:
-
-        # count stores the number of iteration, always print before return
-        count += 1
         matrix = queue.pop(0)
 
         # check if matrix already visited, this part can be improved
@@ -81,7 +78,6 @@ def solve(matrix, matrixStep, queue, parent):
         # if start state is already a goal state, return the matrixStep
         if matrix == goalState:
             matrixStep.append(matrix)
-            print("Total iterasi: " + str(count))
             return
 
         # iterate all 4 possible direction
@@ -108,10 +104,8 @@ def solve(matrix, matrixStep, queue, parent):
             # finally, check if newMatrix is the goal state
             if newMatrix == goalState:
                 connectParent(newMatrix, matrixStep, parent)
-                print("Total iterasi: " + str(count))
                 return
 
     # if time limit exceded
     if queue:
         connectParent(matrix, matrixStep, parent)
-        print("Total iterasi: " + str(count))

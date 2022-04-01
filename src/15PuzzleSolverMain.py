@@ -35,7 +35,7 @@ if (matrix != None):
         print("Status tujuan tidak dapat dicapai")
     else:
         start = time.time_ns()
-        print("Status tujuan dapat dicapai")
+        print("Status tujuan dapat dicapai, mencari solusi...")
         s.startState = matrix
         s.solve(matrix, matrixStep, liveQueue, parent)
         end = time.time_ns()
@@ -45,7 +45,6 @@ if (matrix != None):
             for i in range(len(matrixStep)):
                 print("\nLangkah ke-" + str(i+1) + ":")
                 m.printMatrix(matrixStep[i])
-                print("gFunc: " + str(s.gFunc(matrixStep[i])))
         duration = (end - start)
         if duration > 1000000000:
             duration = duration / 1000000000
@@ -55,5 +54,7 @@ if (matrix != None):
             print("\nWaktu eksekusi:", duration, "ms")
         else:
             print("\nWaktu eksekusi:", duration, "ns")
-        # prompt before exiting
-        input("Press enter to exit\n")
+else:
+    print("Error saat membaca matriks persoalan.")
+# prompt before exiting
+input("Press enter to exit\n")

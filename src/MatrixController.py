@@ -1,11 +1,16 @@
 import os
-from unittest import case
 
 # read matrix from .txt file from specified input
 def readMatrix(filename):
     matrix = []
     # get parent folder path
-    fileDir = os.path.join( os.getcwd(), 'test', filename)
+    cwd = os.getcwd()
+    pardir = ""
+    if (os.path.basename(os.path.normpath(cwd)) != "bnb-15puzzle"):
+        pardir = os.path.abspath(os.path.join(cwd, os.pardir))
+    else:
+        pardir = cwd
+    fileDir = os.path.join(pardir, "test", filename)
     print(fileDir)
     try:
         with open(fileDir, 'r') as f:
@@ -40,6 +45,7 @@ def find16(matrix):
                 return i, j
     return -1, -1
 
+# copy matrix
 def copyMatrix(matrix):
     tempMatrix = []
     for i in range(len(matrix)):
