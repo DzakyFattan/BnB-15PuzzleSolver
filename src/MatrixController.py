@@ -18,12 +18,10 @@ def readMatrix(filename):
                 tempList = list(line.strip().split())
                 tempLine = []
                 for x in tempList:
-                    print(type(x), x)
                     try:
                         tempLine.append(int(x))
                     except ValueError:
                         tempLine.append(16)
-                print(tempLine)
                 matrix.append(tempLine)
                 # matrix.append([int(x) for x in tempList])
         return matrix
@@ -67,16 +65,16 @@ def copyMatrix(matrix):
 def move16(matrix, direction):
     i, j = find16(matrix)
     tempMatrix = copyMatrix(matrix)
-    if direction == 0:
+    if direction == "Atas":
         if i > 0:
             tempMatrix[i][j], tempMatrix[i-1][j] = matrix[i-1][j], matrix[i][j]
-    elif direction == 2:
+    elif direction == "Bawah":
         if i < len(matrix)-1:
             tempMatrix[i][j], tempMatrix[i+1][j] = matrix[i+1][j], matrix[i][j]
-    elif direction == 3:
+    elif direction == "Kiri":
         if j > 0:
             tempMatrix[i][j], tempMatrix[i][j-1] = matrix[i][j-1], matrix[i][j]
-    elif direction == 1:
+    elif direction == "Kanan":
         if j < len(matrix[i])-1:
             tempMatrix[i][j], tempMatrix[i][j+1] = matrix[i][j+1], matrix[i][j]
     return tempMatrix

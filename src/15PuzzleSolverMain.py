@@ -5,9 +5,6 @@ import Solver as s
 
 # variables for BnB
 matrixStep = []
-liveQueue = []
-f = 1
-parent = {}
 
 def printTitle():
     print("""
@@ -37,14 +34,14 @@ if (matrix != None):
         start = time.time_ns()
         print("Status tujuan dapat dicapai, mencari solusi...")
         s.startState = matrix
-        s.solve(matrix, matrixStep, liveQueue, parent)
+        s.solve(matrix, matrixStep)
         end = time.time_ns()
         if (matrixStep != []):
             print("\nPosisi awal:")
             m.printMatrix(matrixStep.pop(0))
             for i in range(len(matrixStep)):
-                print("\nLangkah ke-" + str(i+1) + ":")
-                m.printMatrix(matrixStep[i])
+                print("\nLangkah ke-" + str(i+1) + ": " + str(matrixStep[i][1]))
+                m.printMatrix(matrixStep[i][0])
         duration = (end - start)
         if duration > 1000000000:
             duration = duration / 1000000000
