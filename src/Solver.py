@@ -8,7 +8,7 @@ counter = 0
 tempDict = {}
 visited = []
 startState = []
-timeLimit = 300
+timeLimit = 1200
 
 # Function Kurang(i)
 def KURANGFunc(matrix):
