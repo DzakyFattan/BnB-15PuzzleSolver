@@ -1,4 +1,4 @@
-import time
+from time import time_ns
 import sys
 import MatrixController as m
 import Solver as s
@@ -31,11 +31,11 @@ if (matrix != None):
     if kurang % 2 == 1:
         print("Status tujuan tidak dapat dicapai")
     else:
-        start = time.time_ns()
+        start = time_ns()
         print("Status tujuan dapat dicapai, mencari solusi...")
         s.startState = matrix
         s.solve(matrix, matrix_step)
-        end = time.time_ns()
+        end = time_ns()
         if (matrix_step != []):
             print("\nPosisi awal:")
             m.print_matrix(matrix_step.pop(0))
