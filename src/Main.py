@@ -51,7 +51,11 @@ def main():
                 for i in range(len(matrix_step)):
                     print("\nLangkah ke-" + str(i+1) + ": " + str(matrix_step[i][1]))
                     m.print_matrix(matrix_step[i][0])
-                calc_time(start, end)
+            print("\nUrutan langkah: ", end="")
+            for i in range(len(matrix_step)):
+                str_to_print = str(matrix_step[i][1]) + ", " if i != len(matrix_step) - 1 else str(matrix_step[i][1])
+                print(str_to_print, end="")
+            calc_time(start, end)
     else:
         print("Error saat membaca matriks persoalan.")
     # prompt before exiting
