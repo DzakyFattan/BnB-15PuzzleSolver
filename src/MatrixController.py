@@ -1,7 +1,7 @@
 import os
 
 # read matrix from .txt file from specified input
-def readMatrix(filename):
+def read_matrix(filename):
     matrix = []
     # get parent folder path
     cwd = os.getcwd()
@@ -30,7 +30,7 @@ def readMatrix(filename):
         return None
 
 # print matrix properly
-def printMatrix(matrix):
+def print_matrix(matrix):
     if (matrix != None):
         print("---------------------")
         for i in range(len(matrix)):
@@ -45,7 +45,7 @@ def printMatrix(matrix):
         print("Matrix kosong")
 
 # find 16 position in matrix, return -1, -1 if not found
-def find16(matrix):
+def find_16(matrix):
     for i in range(len(matrix)):
         for j in range(len(matrix[i])):
             if (matrix[i][j] == 16):
@@ -53,7 +53,7 @@ def find16(matrix):
     return -1, -1
 
 # copy matrix
-def copyMatrix(matrix):
+def copy_matrix(matrix):
     tempMatrix = []
     for i in range(len(matrix)):
         tempMatrix.append([])
@@ -62,9 +62,9 @@ def copyMatrix(matrix):
     return tempMatrix
 
 # move 16 to specified position
-def move16(matrix, direction):
-    i, j = find16(matrix)
-    tempMatrix = copyMatrix(matrix)
+def move_16(matrix, direction):
+    i, j = find_16(matrix)
+    tempMatrix = copy_matrix(matrix)
     if direction == "Atas":
         if i > 0:
             tempMatrix[i][j], tempMatrix[i-1][j] = matrix[i-1][j], matrix[i][j]
@@ -78,3 +78,11 @@ def move16(matrix, direction):
         if j < len(matrix[i])-1:
             tempMatrix[i][j], tempMatrix[i][j+1] = matrix[i][j+1], matrix[i][j]
     return tempMatrix
+
+# for dict purposes
+def mat_to_str(matrix):
+    strToReturn = ""
+    for i in range(len(matrix)):
+        for j in range(len(matrix[i])):
+            strToReturn += str(matrix[i][j]) + " "
+    return strToReturn.strip()

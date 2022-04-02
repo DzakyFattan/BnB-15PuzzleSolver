@@ -4,7 +4,7 @@ import MatrixController as m
 import Solver as s
 
 # variables for BnB
-matrixStep = []
+matrix_step = []
 
 def printTitle():
     print("""
@@ -22,11 +22,11 @@ def printTitle():
 sys.setrecursionlimit((10**3))
 printTitle()
 ipt = input("\nInput nama file, pastikan sudah terletak dalam folder test (contoh: input.txt): ")
-matrix = m.readMatrix(ipt)
+matrix = m.read_matrix(ipt)
 if (matrix != None):
     print("Matriks yang dibaca:")
-    m.printMatrix(matrix)
-    kurang = s.KURANGFunc(matrix)
+    m.print_matrix(matrix)
+    kurang = s.kurang_func(matrix)
     print("Jumlah Kurang(i) + X:", kurang)
     if kurang % 2 == 1:
         print("Status tujuan tidak dapat dicapai")
@@ -34,14 +34,14 @@ if (matrix != None):
         start = time.time_ns()
         print("Status tujuan dapat dicapai, mencari solusi...")
         s.startState = matrix
-        s.solve(matrix, matrixStep)
+        s.solve(matrix, matrix_step)
         end = time.time_ns()
-        if (matrixStep != []):
+        if (matrix_step != []):
             print("\nPosisi awal:")
-            m.printMatrix(matrixStep.pop(0))
-            for i in range(len(matrixStep)):
-                print("\nLangkah ke-" + str(i+1) + ": " + str(matrixStep[i][1]))
-                m.printMatrix(matrixStep[i][0])
+            m.print_matrix(matrix_step.pop(0))
+            for i in range(len(matrix_step)):
+                print("\nLangkah ke-" + str(i+1) + ": " + str(matrix_step[i][1]))
+                m.print_matrix(matrix_step[i][0])
         duration = (end - start)
         if duration > 1000000000:
             duration = duration / 1000000000
