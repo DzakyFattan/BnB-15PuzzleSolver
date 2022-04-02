@@ -90,8 +90,6 @@ def solve(matrix, matrix_step):
     if matrix == goal_state:
         matrix_step.append(matrix)
         return
-    
-    
 
     # push first matrix state to live_queue
     hq.heappush(live_queue, (f_func(matrix) + g_func(matrix), matrix))
