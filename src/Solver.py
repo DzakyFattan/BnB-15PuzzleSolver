@@ -63,29 +63,36 @@ def connect_parent(newMatrix, matrix_step):
 def solve(matrix, matrix_step):
     # matrix stores the current matrixState
     # matrix_step stores the steps of solving the matrix
-    # queue stores the list of matrixState that are not yet visited, is a PrioQueue to make sure we visited the matrixState with the lowest gFunc
-    # parent stores the parent of each matrixState
-
+    
+    # set start_state
     global start_state
+    start_state = matrix
+
+    # parent stores the parent of each matrixState
     global parent
 
-    timeconst = 1000000
+    # visited stores the visited matrixState
     visited = set()
     
+    # f(x) 
     mat_info[m.mat_to_str(matrix)] = ("Init", 0)
     level = 0
-    # queue for node to process
+
+    # live_queue stores the list of matrixState that are not yet visited, 
+    # is a PrioQueue to make sure we visited the matrixState with the lowest gFunc
     live_queue = []
     hq.heapify(live_queue)
+
     # a timer, to prevent a very long execution time
     start = time()
+
     # if start state is already a goal state, return the matrix_step
     if matrix == goal_state:
         matrix_step.append(matrix)
         return
     
-    # set start_state
-    start_state = matrix
+    
+
     # push first matrix state to live_queue
     hq.heappush(live_queue, (f_func(matrix) + g_func(matrix), matrix))
     count = 0
@@ -111,20 +118,17 @@ def solve(matrix, matrix_step):
                 continue
 
             # print("Jumlah simpul dibangkitkan: " + str(count))
-            # create dic of matrix info and the parent            
+            # create dict of matrix info and the parent            
             mat_info[matstr] = (move[1],  level)          
             parent[matstr] = matrix
 
             # count++
             count += 1
-            # if (count % 1000 == 0):
-            #     print("Jumlah simpul dibangkitkan: " + str(count))
-            #     print("live_queue length: " + str(len(live_queue)))
             
             # check if newMatrix is the goal state
             if newMatrix == goal_state:
                 connect_parent(newMatrix, matrix_step)
-                print("Jumlah simpul dibangkitkan: " + str(count))
+                print("Jumlah simpul yang dibangkitkan: " + str(count))
                 return
             
             # else, queue the newMatrix
@@ -133,4 +137,4 @@ def solve(matrix, matrix_step):
     # if time limit exceded
     if live_queue:
         connect_parent(matrix, matrix_step)
-        print("Jumlah simpul dibangkitkan: " + str(count))
+        print("Jumlah simpul yang dibangkitkan: " + str(count))

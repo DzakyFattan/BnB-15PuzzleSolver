@@ -5,7 +5,6 @@ def read_matrix(filename):
     matrix = []
     # get parent folder path
     cwd = os.getcwd()
-    pardir = ""
     if (os.path.basename(os.path.normpath(cwd)) != "bnb-15puzzle"):
         pardir = os.path.abspath(os.path.join(cwd, os.pardir))
     else:
@@ -32,15 +31,18 @@ def read_matrix(filename):
 # print matrix properly
 def print_matrix(matrix):
     if (matrix != None):
-        print("---------------------")
+        print("╔════╤════╤════╤════╗")
+        # ┌	┍	┎	┏─	━	│	┃
         for i in range(len(matrix)):
+            print("║", end=" ")
             for j in range(len(matrix[i])):
                 strToPrint = str(matrix[i][j]) + " " if matrix[i][j] < 10 else str(matrix[i][j])
                 if strToPrint == "16": strToPrint = "  "
-                print("| " + strToPrint, end=" ")
-                if j == len(matrix[i])-1:
-                    print("|")
-            print("---------------------")
+                strToPrint = strToPrint + " │" if j != len(matrix[i])-1 else strToPrint + " ║"
+                print(strToPrint, end=" ")
+            if i != len(matrix) - 1:
+                print("\n╟────┼────┼────┼────╢")
+        print("\n╚════╧════╧════╧════╝")
     else:
         print("Matrix kosong")
 
@@ -79,7 +81,7 @@ def move_16(matrix, direction):
             tempMatrix[i][j], tempMatrix[i][j+1] = matrix[i][j+1], matrix[i][j]
     return tempMatrix
 
-# for dict purposes
+# transform matrix to string
 def mat_to_str(matrix):
     strToReturn = ""
     for i in range(len(matrix)):
