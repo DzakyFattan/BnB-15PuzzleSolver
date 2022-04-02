@@ -14,7 +14,7 @@ def print_title():
 |_|____/      \/     \__,_/___/___|_|\___| \__/\___/|_| \_/ \___|_|   
                                                                       
 """)
-    print("\nDibuat oleh: Dzaky Fattan Rizqullah - 13520003\n")
+    print("Dibuat oleh: Dzaky Fattan Rizqullah - 13520003")
 
 def calc_time(start, end):
     duration = (end - start)
